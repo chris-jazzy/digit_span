@@ -1,24 +1,28 @@
-% function [wins, payment, final_length]=digit_span(particNum, DateTime, window, trials, max_span, min_span, num_to_change)
+function [wins, payment, final_length]=digit_span(particNum, DateTime, window, trials, blocks, start_span, max_span, min_span, num_to_change)
 
 clear all
 % clc
 
 % % DELETE WHEN CONVERTED TO FUNCTION
-compNum=99;
-DateTime = datestr(now,'ddmm-HHMM'); % Get date and time for log file
-insertDate = [datestr(now,'ddmm'), '999'];
-particNum = [insertDate, num2str(compNum)];
+% compNum=99;
+% DateTime = datestr(now,'ddmm-HHMM'); % Get date and time for log file
+% insertDate = [datestr(now,'ddmm'), '999'];
+% particNum = [insertDate, num2str(compNum)];
+% trials = 5;
+% blocks = 2; % one forward, one backwards
+% num_to_change = 3;
+% max_span = 8;
+% min_span = 3;
+% start_span = 5;
 % DELETE SCREEN VARIABLES LABELED BELOW
+% COMMENT OUT SCREEN and PTB INITIATION
 
 %% Set Variables
 % num_trials= [1:5];
 language=1; % 1=Italian, 2=English
-trials = 5;
-blocks = 2; % one forward, one backwards
-num_to_change = 3;
-max_span = 8;
-min_span = 3;
-start_span = 5;
+win=window;
+
+
 overall_trial = (1:trials*blocks)';
 digit_array = randi(9, max_span, trials, blocks); % construct all possible trials
 prompt={'Inserisci le digiti nell''ordine mostrata:', 'Inserisci le digiti nell''ordine inversa:';'Please enter the numbers in the order shown:','Please enter the numbers in reverse order:'};
@@ -214,4 +218,4 @@ sca;
 
 % save(['sub' num2str(particNum) '-' num2str(DateTime) '_2beauty_contest'], 'particNum', ...
 %     'beauty_calc_subResultsTable', 'beauty_contest_subResultsTable');
-
+end
