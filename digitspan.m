@@ -1,6 +1,6 @@
 function [wins, payment, final_length]=digit_span(particNum, DateTime, window, trials, blocks, start_span, max_span, min_span, num_to_change)
 
-clear all
+% clear all
 % clc
 
 % % DELETE WHEN CONVERTED TO FUNCTION
@@ -42,21 +42,21 @@ KbName('UnifyKeyNames');
 % Screen('Preference', 'SkipSyncTests', 0);
 % [win,screenrect]=Screen('OpenWindow',0,[255 255 255],[0 0 800 600]); 
 
-% for two-screen setup
-Screen('Preference', 'SkipSyncTests', 1);
-[win, windowRect] = Screen('OpenWindow', 1,[255 255 255]); 
-
-% %%%%%%%%%%%DELETE WHEN INCORPORATED INTO UMBRELLA SCRIPT
-[screenXpixels, screenYpixels] = Screen('WindowSize', win);
-cfg.uppTextYpos=screenYpixels * 8/40;
-cfg.fontSize = round(screenYpixels * 1.5/40);
-cfg.fontSizeBig = round(screenYpixels * 2/40);
-cfg.font = 'Courier New';
+% % for two-screen setup
+% Screen('Preference', 'SkipSyncTests', 1);
+% [win, windowRect] = Screen('OpenWindow', 1,[255 255 255]); 
+% 
+% % %%%%%%%%%%%DELETE WHEN INCORPORATED INTO UMBRELLA SCRIPT
+% [screenXpixels, screenYpixels] = Screen('WindowSize', win);
+% cfg.uppTextYpos=screenYpixels * 8/40;
+% cfg.fontSize = round(screenYpixels * 1.5/40);
+% cfg.fontSizeBig = round(screenYpixels * 2/40);
+% cfg.font = 'Courier New';
 
 %%%%%%%%%%%%%%
 
-    Screen('TextFont', win, cfg.font);
-    Screen('TextSize', win, cfg.fontSize);
+%     Screen('TextFont', win, cfg.font);
+%     Screen('TextSize', win, cfg.fontSize);
 
 
 %% Instruction
