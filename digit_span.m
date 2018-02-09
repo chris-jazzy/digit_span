@@ -29,10 +29,12 @@ overall_trial = (1:trials*blocks)';
 digit_array = randi(9, max_span, trials, blocks); % construct all possible trials
 prompt={'Inserisci i numeri nell''ordine mostrato:', 'Inserisci i numeri nell''ordine inverso:';'Please enter the numbers in the order shown:','Please enter the numbers in reverse order:'};
 instructions={'Ora vedrai una sequenza di numeri. \nDovrai ricordarli e poi inserirli nello stesso ordine. \nPremi ''backspace/cancella'' se sbagli. \n\nPremi ''invio'' per iniziare.', ...
-    'In questa parte, dovrai ancora ricordarti la sequenza di numeri \nPero'' adesso dovrai reinserirli nell''ordine inverso dall''ultimo al primo. \n\n<color=6E7B8B>Premi ''invio'' per continuare.<color>'; ...
-    'Now you will be shown a string of numbers. \n  You have to remember them \n and then type them back in in the same order \n Press "backspace" if you make a mistake. \n\n<color=6E7B8B>Press ''return'' to begin.<color>', ...
-    'In this part of the task, again remember the string of numbers \n but now type them back in the opposite order \n\n<color=6E7B8B>Press ''return'' to continue<color>'};
+    'In questa parte, dovrai ancora ricordarti la sequenza di numeri \nPero'' adesso dovrai reinserirli nell''ordine inverso dall''ultimo al primo. \n\nPremi ''invio'' per continuare.'; ...
+    'Now you will be shown a string of numbers. \n  You have to remember them \n and then type them back in in the same order \n Press "backspace" if you make a mistake. \n\nPress ''return'' to begin.', ...
+    'In this part of the task, again remember the string of numbers \n but now type them back in the opposite order \n\nPress ''return'' to continue'};
 continue_prompt={'Premi ''invio'' ' ;'Press ''return'' '};
+survey_alert={'Ora inizia un altro feedback form sul web.\n\nUna volta completato premi ''invia''. \n\nPoi l''esperimento continuera''.\n\nPremi ''spazio'' ', ...
+    'Now you will see another web-based feedback form. Complete it and press ''return''. Then, the experiment continues.\n\n Press ''return'' '};
 % Pre-allocate
 block_num = NaN(blocks*trials,1);
 digit_span_table = table; % create table to be filled in trial by trial
@@ -40,26 +42,7 @@ digit_span_table = table; % create table to be filled in trial by trial
 KbName('UnifyKeyNames');
 RestrictKeysForKbCheck(cfg.enabledNumberKeys);
     
-% %%Open PTB
-% % one-screen setup
-% Screen('Preference', 'SkipSyncTests', 0);
-% [win,screenrect]=Screen('OpenWindow',0,[255 255 255],[0 0 800 600]); 
 
-% % for two-screen setup
-% Screen('Preference', 'SkipSyncTests', 1);
-% [win, windowRect] = Screen('OpenWindow', 1,[255 255 255]); 
-% 
-% % %%%%%%%%%%%DELETE WHEN INCORPORATED INTO UMBRELLA SCRIPT
-% [screenXpixels, screenYpixels] = Screen('WindowSize', win);
-% cfg.uppTextYpos=screenYpixels * 8/40;
-% cfg.fontSize = round(screenYpixels * 1.5/40);
-% cfg.fontSizeBig = round(screenYpixels * 2/40);
-% cfg.font = 'Courier New';
-% 
-% %%%%%%%%%%%%%%
-% 
-%     Screen('TextFont', win, cfg.font);
-%     Screen('TextSize', win, cfg.fontSize);
 %% initialize event log
 Events.types = {};
 Events.values = {};
@@ -139,7 +122,7 @@ for block = 1:blocks;
         [Events, nbevents] = LogEvents(Events, nbevents,  'Picture', 'Clear', time); 
              
         
-        %% Type the number - subejct entry
+        %% Type the number - subject entry
         Start_trial = GetSecs;
         digit=0; % describes the changing length of entry within one trial
         trial_responseD=[];
@@ -258,7 +241,7 @@ for block = 1:blocks;
     %%   Warning for the second block
     if block==1;
         keyName='';
-        Screen('TextSize', win, cfg.fontSize);
+        Screen('TextSize', win, cfg.fontSizeSmall);
         while ~strcmp(keyName,'Return')
             time.start = GetSecs; 
             DrawFormattedText(win,char(instructions(language,2)),'center','center',[0 0 0]);
@@ -300,7 +283,24 @@ save([ particNum '-' num2str(DateTime) '_4digitspan'], 'particNum','digit_span_t
 
 
 
-% sca;
+%% Web survey warning
+taskTimeStamp = GetSecs;
+time.start = taskTimeStamp;
+
+RestrictKeysForKbCheck(cfg.enabledSelectKeys); % limit recognized presses to space, left, right arrows and both enters MAC
+    instructs = strcat('<color=000000>', survey_alert(language), '<color>');
+    DrawFormattedText2(instructs, 'win', window, 'sx', 'center', 'sy', cfg.uppTextYpos, 'xalign', 'center', 'yalign', 'center', 'xlayout', 'center', 'wrapat', 70); 
+    Screen('Flip',window);
+
+[secs, keyCode, deltaSecs] = KbWait([],2);  %#ok<*ASGLU>
+keyName{1} = KbName(keyCode);
+time.end = GetSecs;
+
+[Events, nbevents] = LogEvents(Events, nbevents,  'Picture', 'Survey warning', time);
+save(backupfile)   % backs the entire workspace up just in case we have to do a nasty abort
+[Events, nbevents] = LogEvents(Events, nbevents,  'Button Press', keyName, secs);
+
+time.end = GetSecs;
 
 
 % save(['sub' num2str(particNum) '-' num2str(DateTime) '_2beauty_contest'], 'particNum', ...
